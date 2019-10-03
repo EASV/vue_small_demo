@@ -30,7 +30,7 @@
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>
-                                        <v-list-item-title v-text="album.title"></v-list-item-title>
+                                        <v-list-item-title>{{album.title}}</v-list-item-title>
                                     </v-list-item-content>
 
                                     <v-list-item-action>
@@ -81,18 +81,24 @@
             fetchAlbums() {
                 restApi.get('albums')
                     .then((result) => {
-                        this.albums = result.data
-                    })
-            },
-            deleteAlbum: function(album) {
-                this.albums = this.albums.filter(alb => alb.id !== album.id);
-                restApi.delete('albums/'+album.id)
-                    .then((result) => {
-                        console.log(result)
-                        if(result.status !== 200) {
-                            this.albums.push(album)
+                        if (this.albums && this.albums.length > 0){
+                            this.albums = this.albums.filter(a => result.data.some(an => an.id === a.id));
+                            console.log('Ostebolle')
+                        } else{
+                            this.albums = result.data
+                            console.log('Ostebolle22')
                         }
                     })
+            },
+            async deleteAlbum(album) {
+                 let result = await restApi.delete('albums/'+album.id)
+                console.log('os2t', result.status)
+                if(result.status !== 200) {
+                    // this.albums.push(album)
+                } else {
+                    this.fetchAlbums()
+                }
+
             }
         }
     };
