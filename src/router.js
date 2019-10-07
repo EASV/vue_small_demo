@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import AlbumsOverview from "./views/albums/AlbumsOverview";
 import AlbumsCreate from "./views/albums/AlbumsCreate";
+import AlbumsUpdate from "./views/albums/AlbumsUpdate";
+import ShoesList from "./views/shoes/ShoesList";
 
 Vue.use(Router)
 
@@ -21,9 +23,19 @@ export default new Router({
       component: AlbumsCreate
     },
     {
+      path: '/albums-update/:id',
+      name: 'albums-update',
+      component: AlbumsUpdate
+    },
+    {
       path: '/albums',
       name: 'albums',
       component: AlbumsOverview
+    },
+    {
+      path: '/shoes',
+      name: 'shoes',
+      component: ShoesList
     },
     {
       path: '/about',

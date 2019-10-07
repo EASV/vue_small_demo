@@ -1,6 +1,17 @@
 <template>
+
     <v-container>
+
         <v-row no-gutters>
+            <v-snackbar
+                    v-model="deletedSuccess">
+                {{ deletedText }}
+                <v-btn
+                        color="pink"
+                        text
+                        @click="deletedSuccess = false"
+                >Close</v-btn>
+            </v-snackbar>
             <v-col
                     md="6"
                     offset-md="3">
@@ -26,7 +37,7 @@
                                                :key="album.title">
                                 <v-list-item>
                                     <v-list-item-avatar>
-                                        <v-icon>mdi-image</v-icon>
+                                        <v-img v-bind:src="'https://picsum.photos/id/' + album.id + '/40'"></v-img>
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>
@@ -74,7 +85,9 @@
         },
         data () {
             return {
-                albums: []
+                albums: [],
+                deletedSuccess: false,
+                deletedText: 'Album deleted'
             }
         },
         methods: {
@@ -83,16 +96,14 @@
                     .then((result) => {
                         if (this.albums && this.albums.length > 0){
                             this.albums = this.albums.filter(a => result.data.some(an => an.id === a.id));
-                            console.log('Ostebolle')
                         } else{
                             this.albums = result.data
-                            console.log('Ostebolle22')
                         }
                     })
             },
             async deleteAlbum(album) {
-                 let result = await restApi.delete('albums/'+album.id)
-                console.log('os2t', result.status)
+                let result = await restApi.delete('albums/'+album.id)
+                this.deletedSuccess = true;
                 if(result.status !== 200) {
                     // this.albums.push(album)
                 } else {
